@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Page d'accueil - AMUExo</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #00aba0;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header-logo a {
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .header-logo img {
+            margin-right: 10px;
+            height: 30px;
+        }
+        nav.header_bouton a {
+            text-decoration: none;
+            color: white;
+            background-color: #0056b3;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: background-color 0.3s;
+            margin-left: 10px;
+            width: auto;
+            display: inline-block;
+            white-space: nowrap;
+        }
+        nav.header_bouton a:hover {
+            background-color: #004494;
+            color: white;
+        }
+
+        .main {
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+        .carousel-item {
+            height: 90vh;
+            min-height: 300px;
+            background: no-repeat center center scroll;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+            position: relative;
+        }
+        .carousel-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .carousel-caption {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+        }
+        footer {
+            background-color: #00aba0;
+            color: white;
+            text-align: center;
+            padding: 10px 20px;
+        }
+        .feature, .testimonials, .contact, .news {
+            padding: 40px 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .feature h3, .testimonials h3, .contact h3, .news h3 {
+            color: #00aba0;
+        }
+        .feature ul, .news ul {
+            list-style: none;
+            padding: 0;
+        }
+        .feature ul li, .news ul li {
+            margin-bottom: 10px;
+        }
+        .feature ul li::before, .news ul li::before {
+            content: "\f00c";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            margin-right: 10px;
+            color: #00aba0;
+        }
+        .testimonial-item {
+            margin-bottom: 20px;
+        }
+        .testimonial-item p {
+            font-style: italic;
+        }
+
+        .news {
+            background: linear-gradient(to right, #9EFFE9, #00aba0);
+            color: white;
+        }
+        .news ul li {
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-logo">
+        <a th:href="@{'/'}">
+            <img th:src="@{/images/logo.webp}" alt="AMUExo Logo">
+            AMUExo
+        </a>
+    </div>
+    <nav class="header_bouton">
+        <div th:if="${isLoggedIn}">
+            <a th:if="${role == 'Enseignant'}" th:href="@{/user/{id}/ue(id=${user.id})}" class="btn btn-primary">Mon espace personnel</a>
+            <a th:if="${role == 'Etudiant'}" th:href="@{/student/{id}(id=${user.id})}" class="btn btn-primary">Mon espace personnel</a>
+            <a href="/logout" class="btn btn-danger">Déconnexion</a>
+        </div>
+        <div th:if="${!isLoggedIn}">
+            <a href="/login" class="btn btn-primary">Connexion</a>
+            <a href="/signup" class="btn btn-primary">Inscription</a>
+        </div>
+    </nav>
+</header>
+
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+    </ol>
+    <div class="carousel-inner">
+        <div class="carousel-item active"
+             style="background-image: url('https://www.sierre.ch/data/images/accroches/pratique/formation/wpThumbnails/Bourses_etudes.jpeg');">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>Bienvenue sur AMUExo</h5>
+                <p>Explorez notre site pour plus d'informations.</p>
+            </div>
+        </div>
+        <div class="carousel-item"
+             style="background-image: url('https://cdn.futura-sciences.com/cdn-cgi/image/width=1520,quality=50,format=auto/sources/images/Clic2Load/julien/personnaliser_le_ruban_word/pxhere.jpg');">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>Apprenez avec nous</h5>
+                <p>Rejoignez notre communauté d'apprenants.</p>
+            </div>
+        </div>
+    </div>
+    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+
+<div class="main bg-light text-dark py-5">
+    <p class="lead"></p>
+</div>
+
+<div class="container">
+    <div class="feature">
+        <h3>Fonctionnalités principales</h3>
+        <ul>
+            <li>Consulter des UEs avec des exercices et leurs corrections.</li>
+            <li>Participer à des quizz et obtenir des scores instantanément.</li>
+            <li>Suivre votre progression et améliorer vos compétences.</li>
+        </ul>
+    </div>
+
+    <div class="feature">
+        <h3>Pourquoi choisir AMUExo ?</h3>
+        <ul>
+            <li>Accès à un large éventail de matières et d'exercices.</li>
+            <li>Une plateforme conviviale et facile à utiliser.</li>
+            <li>Support et assistance disponibles pour tous les utilisateurs.</li>
+        </ul>
+    </div>
+
+    <div class="testimonials">
+        <h3>Témoignages</h3>
+        <div class="testimonial-item">
+            <p>"AMUExo m'a aidé à améliorer mes compétences en mathématiques. Les exercices sont variés et bien expliqués."</p>
+            <p><strong>- Abdelhak BENKORTBI</strong></p>
+        </div>
+        <div class="testimonial-item">
+            <p>"La plateforme est très intuitive. Mes étudiants l'adorent et ils peuvent pratiquer à leur propre rythme."</p>
+            <p><strong>- Romain CATANESE</strong></p>
+        </div>
+    </div>
+
+    <div class="news">
+        <h3>Actualités et Événements</h3>
+        <ul>
+            <li>15 Juin 2024 : Webinaire sur les nouvelles techniques d'apprentissage.</li>
+            <li>30 Juin 2024 : Lancement des nouveaux quizz interactifs.</li>
+            <li>15 Juillet 2024 : Rencontre virtuelle avec des experts du domaine.</li>
+        </ul>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2024 AMUExo. Tous droits réservés.</p>
+</footer>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

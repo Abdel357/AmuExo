@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmation d'inscription</title>
+</head>
+<body>
+<div>
+    <h2>Confirmation d'inscription</h2>
+    <p>Bonjour,</p>
+    <p>Merci de vous être inscrit. Veuillez cliquer sur le lien ci-dessous pour confirmer votre inscription :</p>
+    <a th:href="@{${confirmationUrl}}" class="btn btn-primary">Confirmer votre compte</a>
+    <p>Merci,</p>
+    <p>L'équipe d'assistance</p>
+</div>
+</body>
+</html>

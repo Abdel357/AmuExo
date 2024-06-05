@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Résultats de Recherche</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Insertion du style d'en-tête -->
+    <style th:insert="~{header :: header_style}"></style>
+    <style>
+        /* Réinitialisation des styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Styles spécifiques à cette page */
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #007BFF;
+            margin-top: 30px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 10px;
+        }
+
+        li {
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- Insertion de l'en-tête -->
+<div th:insert="~{header :: header}"></div>
+
+<div class="container">
+    <h1>Résultats de Recherche</h1>
+
+    <h2>Exercices</h2>
+    <ul>
+        <li th:each="exercise : ${exercises}">
+            <a th:href="@{'/user/' + ${id} + '/exercise/' + ${exercise.ue.id} + '/view/' + ${exercise.id}}" th:text="${exercise.title}">Exercise Title</a>
+        </li>
+    </ul>
+
+    <h2>Quizz</h2>
+    <ul>
+        <li th:each="quizz : ${quizzes}">
+            <a th:href="@{'/user/' + ${id} + '/quizz/' + ${quizz.ue.id} + '/view/' + ${quizz.id}}" th:text="${quizz.title}">Quizz Title</a>
+        </li>
+    </ul>
+
+    <h2>UEs</h2>
+    <ul>
+        <li th:each="ue : ${ues}">
+            <a th:href="@{'/user/' + ${id} + '/ue/' + ${ue.id}}" th:text="${ue.title}">UE Title</a>
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>

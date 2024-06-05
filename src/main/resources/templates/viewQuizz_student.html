@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quizz</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Insertion du style d'en-tête -->
+    <style th:insert="~{header_student :: header_style}"></style>
+    <style>
+        /* Réinitialisation des styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+
+        h1, h2, h3 {
+            color: #333;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin: 10px 0;
+            text-align: justify;
+        }
+
+        a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        a:hover {
+            background-color: #0056b3;
+            color: white;
+            text-decoration: none;
+        }
+
+        .answer {
+            margin-left: 20px;
+        }
+
+        .submit-button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .submit-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<!-- Insertion de l'en-tête -->
+<div th:insert="~{header_student :: header}"></div>
+
+<div class="container">
+    <h1>
+        <span th:text="${quizz.title}"></span>
+    </h1>
+    <h2>
+        <span th:text="${quizz.ue.title}"></span>
+    </h2>
+    <h3>
+        <span th:text="${quizz.category}"></span>
+    </h3>
+    <hr>
+    <form th:action="@{/student/{id}/ue/{ueId}/quizz/{quizzId}/submit(ueId=${quizz.ue.id}, id=${id}, quizzId=${quizz.id})}" method="post">
+        <input type="hidden" th:value="${quizz.id}" name="quizzId">
+        <div th:each="question, questionStat : ${quizz.questions}">
+            <h4><span th:text="${question.statement}"></span></h4>
+            <div th:each="answer : ${question.answers}">
+                <div class="answer">
+                    <input type="checkbox" th:id="${'answer_' + answer.id}" th:name="${'question_' + question.id + '_' + answer.id}" th:value="true">
+                    <label th:for="${'answer_' + answer.id}" th:text="${answer.text}">Texte de la réponse</label>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="submit-button">Submit</button>
+    </form>
+    <hr>
+    <a th:href="@{/student/{id}/ue/{ueId}(id=${id}, ueId=${quizz.ue.id})}">Retour à la page de l'UE</a>
+</div>
+
+<!--<div class="container">
+    <h1>Titre du quizz</h1>
+    <form th:action="@{/student/{id}/ue/{ueId}/quizz/{quizzId}/submit(ueId=${ueId}, id=${id}, quizzId=${quizzId})}" method="post">
+        <input type="hidden" th:value="${quizz.id}" name="quizzId">
+        <div th:each="question, questionStat : ${quizz.questions}">
+            <h3>Texte de la question</h3>
+            <div th:each="answer : ${question.answers}">
+                <div class="answer">
+                    <input type="checkbox" th:id="${'answer_' + answer.id}" th:name="${'question_' + question.id + '_' + answer.id}" th:value="true">
+                    <label th:for="${'answer_' + answer.id}" th:text="${answer.text}">Texte de la réponse</label>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="submit-button">Submit</button>
+    </form>
+    <hr>
+    <a href="javascript:history.back()">Retour à la liste des quizz</a>
+</div>-->
+</body>
+</html>

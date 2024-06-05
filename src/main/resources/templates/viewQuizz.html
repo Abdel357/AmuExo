@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Détails du Quizz</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+  <style th:insert="~{header :: header_style}"></style>
+
+</head>
+<body>
+<div th:insert="~{header :: header}"></div>
+
+<div class="container">
+  <h1 th:text="${quizz.title}">Titre du quizz</h1>
+  <h2 th:text="${quizz.ue.title}">Ue de l'exercise</h2>
+  <h3>Catégorie: <span th:text="${quizz.category}">Catégorie</span></h3>
+  <hr>
+  <h3>Questions:</h3>
+  <div th:each="question : ${quizz.questions}">
+    <h4 th:text="${question.statement}">Texte de la question</h4>
+    <div th:each="answer : ${question.answers}">
+      <p class="answer">
+        <span th:text="${answer.text}">Texte de la réponse</span>
+        <span th:if="${answer.correct}"> (Correcte)</span>
+      </p>
+    </div>
+    <hr>
+  </div>
+  <h3>Tags:</h3>
+  <div class="tags">
+    <span th:each="tag, iterStat : ${quizz.tags}" th:text="${tag}" th:after="${iterStat.last ? '' : ', '}">Tag</span>
+  </div>
+  <hr>
+  <a th:href="@{/user/{userId}/ue/{ueId}(userId=${userId}, ueId=${ueId})}">Retour à la page de l'UE</a>
+</div>
+</body>
+</html>

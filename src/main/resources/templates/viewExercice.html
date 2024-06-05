@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Détails de l'Exercice</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style th:insert="~{header :: header_style}"></style>
+
+</head>
+<body>
+<div th:insert="~{header :: header}"></div>
+
+<div class="container">
+    <h1 th:text="${exercise.title}">Titre de l'exercise</h1>
+    <h2 th:text="${exercise.ue.title}">Ue de l'exercise</h2>
+    <h3>Catégorie: <span th:text="${exercise.category}">Catégorie</span></h3>
+    <hr>
+    <h3>Énoncé:</h3>
+    <div th:utext="${exercise.statement}">
+        <!-- Énoncé de l'exercise formaté -->
+        Énoncé de l'exercise
+    </div>
+    <hr>
+    <h3>Réponse:</h3>
+    <div th:utext="${exercise.answer}">
+        <!-- Réponse de l'exercise formatée -->
+        Réponse de l'exercise
+    </div>
+    <hr>
+    <h3>Tags:</h3>
+    <div class="tags">
+        <span th:each="tag, iterStat : ${exercise.tags}"
+              th:text="${tag}"
+              th:after="${iterStat.last ? '' : ', '}">Tag</span>
+    </div>
+    <hr>
+    <a th:href="@{/user/{userId}/ue/{ueId}(userId=${userId}, ueId=${ueId})}">Retour à la page de l'UE</a>
+</div>
+</body>
+</html>

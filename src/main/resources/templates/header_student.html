@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style th:fragment="header_style">
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #00aba0;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-logo a {
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .header-logo img {
+            margin-right: 10px;
+            height: 30px;
+        }
+
+        .search-form {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-form input {
+            width: 100%;
+            max-width: 350px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            padding: 5px 15px;
+        }
+
+        .search-form button {
+            background-color: #fff;
+            border: none;
+            color: #007BFF;
+            margin-left: -40px;
+            border-radius: 50%;
+            padding: 5px 10px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: white;
+            background-color: #0056b3;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: background-color 0.3s;
+            margin-left: 10px;
+            width: auto; /* Ajuste la largeur */
+            display: inline-block; /* Permet le réglage de la largeur */
+            white-space: nowrap; /* Empêche le texte de se couper */
+        }
+
+        nav a:hover {
+            background-color: #004494;
+            color: white; /* Garde la couleur du texte en blanc au survol */
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="header-logo">
+        <a th:href="@{'/'}">
+            <img th:src="@{/images/logo.webp}" alt="AMUExo Logo">
+            AMUExo
+        </a>
+    </div>
+    <div class="search-form">
+        <form class="form-inline" th:action="@{'/student/' + ${id} + '/search'}" method="get">
+            <input class="form-control" type="search" placeholder="Rechercher" aria-label="Search" name="query">
+            <button class="btn btn-light" type="submit">🔍</button>
+        </form>
+    </div>
+    <nav>
+        <a th:href="@{/student/{id}/userDetails(id=${id})}" th:text="'Mon Compte'">Mon Compte</a>
+        <a href="/logout">Déconnexion</a>
+    </nav>
+</header>
+</body>
+</html>

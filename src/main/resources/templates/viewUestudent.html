@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Détails de l'Unité d'Enseignement</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Insertion du style d'en-tête -->
+    <style th:insert="~{header_student :: header_style}"></style>
+    <style>
+        /* Réinitialisation des styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Styles spécifiques à cette page */
+        .container {
+            margin-top: 20px;
+        }
+
+        h1, h2 {
+            color: #333;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-row div {
+            flex: 1;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .info-row div:not(:last-child) {
+            margin-right: 20px;
+        }
+
+        .card {
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            color: #333;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .card-text {
+            color: #666;
+            font-size: 14px;
+        }
+
+
+
+
+    </style>
+</head>
+<body>
+<!-- Insertion de l'en-tête -->
+<div th:insert="~{header_student :: header}"></div>
+
+<div class="container">
+    <h1><span th:text="${ue.title}"></span></h1>
+    <div class="info-row">
+        <div>
+            <b>Domaine:</b> <span th:text="${ue.domain}"></span>
+        </div>
+        <div>
+            <b>Année:</b> <span th:text="${ue.year}"></span>
+        </div>
+        <div>
+            <b>Sous-parties:</b> <span th:text="${ue.subParts}"></span>
+        </div>
+    </div>
+
+    <div th:if="${!exercises.isEmpty()}">
+        <h2 class="mt-5">Exercices Associés</h2>
+        <div class="row mt-4">
+            <div class="col-md-4" th:each="exercise : ${exercises}">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a th:href="@{/student/{id}/ue/{ueId}/exo/{exoId}(id=${id}, ueId=${ue.id}, exoId=${exercise.id})}"
+                               th:text="${exercise.title}">Titre de l'exercice</a>
+                        </h5>
+                        <p class="card-text" th:text="${exercise.category}">Catégorie</p>
+                        <p class="card-text" th:text="${#strings.listJoin(exercise.tags, ', ')}">Tags</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${!quizzes.isEmpty()}">
+        <h2 class="mt-5">Quizz Associés</h2>
+        <div class="row mt-4">
+            <div class="col-md-4" th:each="quizz : ${quizzes}">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a th:href="@{/student/{id}/ue/{ueId}/quizz/{quizzId}(id=${id}, ueId=${ue.id}, quizzId=${quizz.id})}"
+                               th:text="${quizz.title}">Titre du quizz</a>
+                        </h5>
+                        <p class="card-text" th:text="${quizz.category}">Catégorie</p>
+                        <p class="card-text" th:text="${#strings.listJoin(quizz.tags, ', ')}">Tags</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Modifier un Exercice</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style th:insert="~{header :: header_style}"></style>
+
+  <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+<div th:insert="~{header :: header}"></div>
+
+<div class="container">
+  <h1>Modifier un Exercice</h1>
+  <form th:action="@{${'/user/' + userId + '/exercise/' + ueId+ '/edit/' + exerciseId}}" th:object="${exerciseForm}" method="post">
+    <div class="form-group">
+      <label for="title">Titre</label>
+      <input type="text" id="title" name="title" th:field="*{title}" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="category">Sous-Partie</label>
+      <select id="category" name="category" th:field="*{category}" class="form-control" required>
+        <option value="">-- Choisir une sous-partie --</option>
+        <option th:each="subPart : ${allSubParts}" th:value="${subPart}" th:text="${subPart}">SubPart</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="tags">Tags</label>
+      <input type="text" id="tags" name="tags" th:field="*{tagsAsString}" class="form-control" placeholder="Ajoutez des tags séparés par des points-virgules">
+    </div>
+    <div class="form-group">
+      <label for="statement">Énoncé</label>
+      <textarea id="statement" name="statement" th:field="*{statement}" class="form-control" required></textarea>
+    </div>
+    <div class="form-group">
+      <label for="answer">Réponse</label>
+      <textarea id="answer" name="answer" th:field="*{answer}" class="form-control" required></textarea>
+    </div>
+    <div class="text-center">
+      <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </div>
+  </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Résultat du Quizz</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Insertion du style d'en-tête -->
+    <style th:insert="~{header_student :: header_style}"></style>
+    <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      width: 80%;
+      margin: 20px auto;
+      background: white;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      border-radius: 5px;
+    }
+    h1, h2, h3, h4, h5 {
+      color: #333;
+    }
+    p {
+      margin: 10px 0;
+      text-align: justify;
+    }
+    a {
+      color: #007BFF;
+      text-decoration: none;
+      font-size: 16px;
+    }
+    a:hover {
+      background-color: #0056b3;
+      color: white;
+      text-decoration: none;
+    }
+    .list-group-item {
+      border: none;
+    }
+    .list-group-item-success {
+      background-color: #d4edda;
+    }
+    .list-group-item-warning {
+      background-color: #fff3cd;
+    }
+    .mt-4 {
+      margin-top: 20px;
+    }
+
+    </style>
+</head>
+<body>
+<!-- Insertion de l'en-tête -->
+<div th:insert="~{header_student :: header}"></div>
+
+<div class="container mt-4">
+    <h2 th:text="${quizz.title}">Titre du quizz</h2>
+    <h3 class="mt-4">Votre score : <span th:text="${score}">0</span>%</h3>
+
+    <div th:each="entry : ${correctAnswersMap}">
+        <div class="mt-4" th:classappend="${questionCorrectnessMap[entry.key]} ? 'border border-success' : 'border border-danger'">
+            <h4 th:text="${entry.key.statement}">Texte de la question</h4>
+            <ul class="list-group">
+                <li class="list-group-item"
+                    th:each="answer : ${entry.key.answers}"
+                    th:classappend="${answer.correct} ? 'list-group-item-success' : ''"
+                    th:text="${answer.text}">Texte de la réponse
+                </li>
+            </ul>
+            <div th:if="${!questionCorrectnessMap[entry.key]}" class="mt-2">
+                <h5 class="text-danger">Vos réponses :</h5>
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-warning"
+                        th:each="answer : ${userAnswersMap[entry.key]}"
+                        th:text="${answer.text}">Texte de la réponse utilisateur
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <a th:href="@{/student/{userId}/ue/{ueId}(userId=${userId}, ueId=${ueId})}">Retour au cours</a>
+</div>
+</body>
+</html>

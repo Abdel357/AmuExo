@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifier une UE</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style th:insert="~{header :: header_style}"></style>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+    </style>
+    <script>
+        function confirmEdit() {
+        return confirm("Attention ! Si vous modifiez une sous-partie, les exercices et quizz liés seront supprimés.");
+    }
+    </script>
+
+</head>
+<body>
+<div th:insert="~{header :: header}"></div>
+
+<div class="container">
+    <h1>Modifier une UE</h1>
+    <form th:action="@{${'/user/' + userId + '/ue/' + ueId + '/edit'}}" th:object="${ueForm}" method="post" onsubmit="return confirmEdit()">
+        <input type="hidden" name="oldSubParts" th:value="${oldSubParts}">
+        <div class="form-group">
+            <label for="title">Titre</label>
+            <input type="text" id="title" name="title" th:field="*{title}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="subParts">Sous-parties</label>
+            <input type="text" id="subParts" name="subParts" th:field="*{subPartsAsString}" class="form-control"
+                   placeholder="Ajoutez des sous-parties séparées par des points-virgules" required>
+        </div>
+        <div class="form-group">
+            <label for="tags">Tags</label>
+            <input type="text" id="tags" name="tags" th:field="*{tagsAsString}" class="form-control"
+                   placeholder="Ajoutez des tags séparés par des points-virgules">
+        </div>
+        <div class="form-group">
+            <label for="domain">Domaine</label>
+            <select id="domain" name="domain" th:field="*{domain}" class="form-control" disabled>
+                <option th:each="domain : ${T(master.ter.exercicescorrections.model.Domain).values()}" th:value="${domain}"
+                        th:text="${domain}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="year">Niveau d'études</label>
+            <select id="year" name="year" th:field="*{year}" class="form-control" disabled>
+                <option th:each="year : ${T(master.ter.exercicescorrections.model.AcademicYear).values()}" th:value="${year}"
+                        th:text="${year}"></option>
+            </select>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

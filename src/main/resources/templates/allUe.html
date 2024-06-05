@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Toutes les Unités d'Enseignement</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Insertion du style d'en-tête -->
+    <style th:insert="~{header :: header_style}"></style>
+    <style>
+        /* Réinitialisation des styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Styles spécifiques à cette page */
+        h1 {
+            text-align: center;
+        }
+
+        .card {
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative; /* Nouveau */
+        }
+
+        .card-title {
+            color: #333;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .card-text {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .btn-create {
+            margin-top: 20px;
+            display: block;
+            width: max-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .status {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .actions {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+        }
+        .styled-header {
+            text-align: center;
+            background-color: #00aba0;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            margin-top: 40px; /* Ajouter de l'espace au-dessus du titre */
+        }
+
+        .styled-header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Styles spécifiques à la pagination */
+        .pagination .page-item {
+            margin: 0 5px;
+        }
+
+        .pagination .page-link {
+            color: #00aba0;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #00aba0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .pagination .page-link:hover {
+            background-color: #00aba0;
+            color: #fff;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #00aba0;
+            color: #fff;
+            border: 1px solid #00aba0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- En-tête -->
+<div th:insert="~{header :: header}"></div>
+
+
+<div class="container">
+    <div class="styled-header">
+        <h1 class="text-center">Toutes les Unités d'Enseignement</h1>
+    </div>
+    <a th:href="@{/user/{userId}/ue/create(userId=${userId})}" class="btn btn-success btn-create">Créer une nouvelle UE</a>
+    <div class="row mt-4">
+        <div class="col-md-4" th:each="ue : ${allUe}">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a th:href="@{/user/{userId}/ue/{ueId}(userId=${userId}, ueId=${ue.id})}" th:text="${ue.title}">Titre de l'UE</a>
+                    </h5>
+                    <p class="card-text" th:text="${ue.domain}"></p>
+                    <p class="card-text" th:text="${ue.year}"></p>
+
+                </div>
+                <div class="actions">
+                    <a th:href="@{/user/{userId}/ue/{ueId}/edit(userId=${userId}, ueId=${ue.id})}" class="btn btn-outline-success">✏️</a>
+                    <form th:action="@{/user/{userId}/ue/{ueId}/delete(userId=${userId}, ueId=${ue.id})}" method="post" style="display:inline;" onsubmit="return confirmDelete();">
+                        <button type="submit" class="btn btn-outline-danger">🗑️</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center mt-4">
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Previous" onclick="prevPage()">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li id="pagination"></li>
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Next" onclick="nextPage()">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<script>
+    function confirmDelete() {
+        return confirm('Êtes-vous sûr de vouloir supprimer cette UE ?');
+    }
+
+    const itemsPerPage = 6; // Nombre d'éléments par page
+    let currentPage = 1;
+    let items = document.querySelectorAll('.col-md-4'); // Sélectionner les éléments à paginer
+
+    function displayItems() {
+        let start = (currentPage - 1) * itemsPerPage;
+        let end = start + itemsPerPage;
+
+        items.forEach((item, index) => {
+            if (index >= start && index < end) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+
+        updatePagination();
+    }
+
+    function updatePagination() {
+        const pagination = document.getElementById('pagination');
+        pagination.innerHTML = '';
+        const totalPages = Math.ceil(items.length / itemsPerPage);
+
+        for (let i = 1; i <= totalPages; i++) {
+            const pageItem = document.createElement('li');
+            pageItem.className = `page-item ${i === currentPage ? 'active' : ''}`;
+            const pageLink = document.createElement('a');
+            pageLink.className = 'page-link';
+            pageLink.href = '#';
+            pageLink.innerText = i;
+            pageLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                currentPage = i;
+                displayItems();
+            });
+
+            pageItem.appendChild(pageLink);
+            pagination.appendChild(pageItem);
+        }
+    }
+
+    function prevPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            displayItems();
+        }
+    }
+
+    function nextPage() {
+        const totalPages = Math.ceil(items.length / itemsPerPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            displayItems();
+        }
+    }
+
+    // Initialiser l'affichage des éléments
+    displayItems();
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

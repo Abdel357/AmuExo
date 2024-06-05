@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Détails du Créateur</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Insertion du style d'en-tête -->
+    <style th:insert="~{header_student :: header_style}"></style>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .card {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .card-text {
+            font-size: 16px;
+        }
+        .ue-list {
+            margin-top: 20px;
+        }
+        .ue-card {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .ue-title {
+            font-weight: bold;
+            color: #007BFF;
+        }
+    </style>
+</head>
+<body>
+<!-- Insertion de l'en-tête -->
+<div th:insert="~{header_student :: header}"></div>
+
+<div class="container">
+    <h1>Détails du Créateur</h1>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title" th:text="${user.firstName + ' ' + user.lastName}">Nom du Créateur</h5>
+            <p class="card-text"><b>Email:</b> <span th:text="${user.email}">Email du créateur</span></p>
+            <p class="card-text"><b>Adresse:</b> <span th:text="${user.adress}">Adresse du créateur</span></p>
+            <p class="card-text"><b>Téléphone:</b> <span th:text="${user.phone}">Téléphone du créateur</span></p>
+        </div>
+    </div>
+
+    <div class="ue-list">
+        <h2>Unités d'Enseignement Créées</h2>
+        <div th:if="${#lists.isEmpty(ues)}">
+            <p>Aucune unité d'enseignement créée.</p>
+        </div>
+        <div th:each="ue : ${ues}" class="ue-card">
+            <p class="ue-title" th:text="${ue.title}">Titre de l'UE</p>
+            <p><b>Domaine:</b> <span th:text="${ue.domain}">Domaine de l'UE</span></p>
+            <p><b>Année:</b> <span th:text="${ue.year}">Année de l'UE</span></p>
+            <p><b>Sous-parties:</b> <span th:text="${ue.subParts}">Sous-parties de l'UE</span></p>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

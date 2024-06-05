@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Création de Quizz</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style th:insert="~{header :: header_style}"></style>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+    </style>
+    <script>
+        window.onload = function() {
+            addQuestion();
+        };
+
+        function addQuestion() {
+            const questionContainer = document.getElementById('questionsContainer');
+            const questionIndex = document.querySelectorAll('.question-group').length;
+            const questionHtml = `
+                <div class="question-group">
+                    <label for="questions${questionIndex}.statement">Texte de la question:</label>
+                    <input type="text" id="questions${questionIndex}.statement" name="questions[${questionIndex}].statement" class="form-control" required>
+                    <div class="answersContainer">
+                        <button type="button" onclick="addAnswer(this, ${questionIndex})" class="btn btn-secondary btn-sm btn-add">Ajouter une réponse</button>
+                    </div>
+                </div>
+            `;
+            questionContainer.insertAdjacentHTML('beforeend', questionHtml);
+        }
+
+        function addAnswer(button, questionIndex) {
+            const answersContainer = button.parentElement;
+            const answerIndex = answersContainer.querySelectorAll('.answer-group').length;
+            const answerHtml = `
+                <div class="answer-group">
+                    <label for="questions${questionIndex}.answers${answerIndex}.text">Texte de la réponse:</label>
+                    <input type="text" id="questions${questionIndex}.answers${answerIndex}.text" name="questions[${questionIndex}].answers[${answerIndex}].text" class="form-control" required>
+                    <label>
+                        <input type="checkbox" name="questions[${questionIndex}].answers[${answerIndex}].correct"> Correcte
+                    </label>
+                </div>
+            `;
+            answersContainer.insertAdjacentHTML('beforeend', answerHtml);
+        }
+        function confirmSubmit() {
+        return confirm("Êtes-vous sûr de vouloir créer ce quizz ? Vous ne pourrez pas le modifier par la suite.");
+    }
+
+    </script>
+</head>
+<body>
+<div th:insert="~{header :: header}"></div>
+
+<div class="container">
+    <h1>Création de Quizz</h1>
+    <form th:action="@{${'/user/' + userId + '/quizz/' + ueId+ '/create'}}" th:object="${quizzForm}" method="post" onsubmit="return confirmSubmit()">
+        <input type="hidden" th:name="ueId" th:value="${ueId}"/>
+        <div class="form-group">
+            <label for="title">Titre:</label>
+            <input type="text" id="title" th:field="*{title}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="category">Catégorie:</label>
+            <select id="category" th:field="*{category}" class="form-control" required>
+                <option value="">--Choisir une catégorie--</option>
+                <option th:each="subPart : ${allSubParts}" th:value="${subPart}" th:text="${subPart}">SubPart</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="tags">Tags</label>
+            <input type="text" id="tags" name="tags" th:field="*{tagsAsString}" class="form-control"
+                   placeholder="Ajoutez des tags séparés par des points-virgules">
+        </div>
+        <div id="questionsContainer" class="form-group">
+            <div th:each="question, stat : *{questions}">
+                <div class="question-group">
+                    <label th:for="${'questions[' + stat.index + '].statement'}">Énoncé de la question:</label>
+                    <input type="text" th:id="${'questions[' + stat.index + '].statement'}" th:field="*{questions[__${stat.index}__].statement}"
+                           class="form-control" required>
+                    <div class="answersContainer" th:each="answer, ansStat : *{questions[__${stat.index}__].answers}">
+                        <div class="answer-group">
+                            <label th:for="${'questions[' + stat.index + '].answers[' + ansStat.index + '].text'}">Texte de la réponse:</label>
+                            <input type="text" th:id="${'questions[' + stat.index + '].answers[' + ansStat.index + '].text'}"
+                                   th:field="*{questions[__${stat.index}__].answers[__${ansStat.index}__].text}" class="form-control" required>
+                            <label>
+                                <input type="checkbox" th:field="*{questions[__${stat.index}__].answers[__${ansStat.index}__].correct}"> Correcte
+                            </label>
+                        </div>
+                    </div>
+                    <button type="button" th:onclick="'addAnswer(this, ' + stat.index + ')'" class="btn btn-secondary btn-sm btn-add">Ajouter une
+                        réponse
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            <button type="button" onclick="addQuestion()" class="btn btn-secondary btn-add">Ajouter une question</button>
+            <button type="submit" class="btn btn-primary">Créer</button>
+        </div>
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

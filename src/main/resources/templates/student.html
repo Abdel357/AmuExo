@@ -1,0 +1,147 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="fr" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Page d'accueil - Utilisateur connecté</title>-->
+<!--    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">-->
+<!--    &lt;!&ndash; Insertion du style d'en-tête &ndash;&gt;-->
+<!--    <style th:insert="~{header_student :: header_style}"></style>-->
+<!--</head>-->
+<!--<body>-->
+<!--&lt;!&ndash; Insertion de l'en-tête &ndash;&gt;-->
+<!--<div th:insert="~{header_student :: header}"></div>-->
+
+<!--<div class="container">-->
+<!--    <div class="main">-->
+<!--        <p class="mt-4 mb-3">Bonjour, <span th:text="${user.firstName}">John</span>!</p>-->
+
+<!--        <div class="button-container">-->
+<!--            <a th:href="@{/student/{id}/ue(id=${user.id})}" class="btn btn-secondary btn-lg">Voir Toutes les Unités d'Enseignement</a>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<div id="flashMessage" class="flash-message mt-4">-->
+<!--    <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert">-->
+<!--        <span th:text="${message}"></span>-->
+<!--        <button type="button" class="close" data-dismiss="alert" aria-label="Close">-->
+<!--            <span aria-hidden="true">&times;</span>-->
+<!--        </button>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>-->
+<!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>-->
+<!--<script>-->
+<!--    $(document).ready(function() {-->
+<!--        if ($('#flashMessage .alert').length) {-->
+<!--            setTimeout(function() {-->
+<!--                $('#flashMessage .alert').alert('close');-->
+<!--            }, 5000);-->
+<!--        }-->
+<!--    });-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Page d'accueil - Utilisateur connecté</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Insertion du style d'en-tête -->
+    <style th:insert="~{header_student :: header_style}"></style>
+    <style>
+        /* Réinitialisation des styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Styles spécifiques à cette page */
+        h1 {
+            text-align: center;
+        }
+
+        .card {
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            color: #333;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .card-text {
+            color: #666;
+            font-size: 14px;
+        }
+        .title-container {
+            margin-top: 40px; /* Ajouter de l'espace au-dessus du titre */
+            padding: 20px;
+            background: #00aba0;
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .btn-create {
+            margin-top: 20px;
+            display: block;
+            width: max-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .status {
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Insertion de l'en-tête -->
+<div th:insert="~{header_student :: header}"></div>
+
+<div class="container">
+    <h1 class="title-container">Les Unités d'Enseignement</h1>
+
+    <div class="row mt-4">
+        <div class="col-md-4" th:each="ue : ${allUe}">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a th:href="@{/student/{id}/ue/{ueId}(id=${id}, ueId=${ue.id})}" th:text="${ue.title}">Titre de l'UE</a>
+                    </h5>
+                    <p class="card-text" th:text="${ue.domain}"></p>
+                    <p class="card-text" th:text="${ue.year}"></p>
+                    <p class="card-text">
+                        Créateur:
+                        <a th:href="@{/user/{creatorId}/creatorDetails(creatorId=${ue.creator.id})}" th:text="${ue.creator.firstName + ' ' + ue.creator.lastName}"></a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
